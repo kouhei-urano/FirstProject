@@ -103,8 +103,7 @@ public final class Main extends JavaPlugin implements Listener {
 //ここも変更しました。
 //そして変更しました。
 //プルリクエストできていますか？
-//プルリクエスト本番
-
+//プルリクエスト本番？
     
 
 
