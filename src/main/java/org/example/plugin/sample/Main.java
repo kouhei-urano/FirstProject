@@ -100,7 +100,7 @@ public final class Main extends JavaPlugin implements Listener {
 }
 
 //ここを変更しました。
-
+//ここも変更しました。
 
 
 
