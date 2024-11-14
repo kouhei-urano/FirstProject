@@ -99,8 +99,8 @@ public final class Main extends JavaPlugin implements Listener {
   }
 }
 
-ffffff
-gggggg
+//ここを変更しました。
+
 
 
 
