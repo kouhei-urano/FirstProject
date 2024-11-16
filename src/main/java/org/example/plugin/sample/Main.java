@@ -23,10 +23,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerBedEnterEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.plugin.java.JavaPlugin;
+
 
 
 public final class Main extends JavaPlugin implements Listener {
@@ -45,46 +47,7 @@ public final class Main extends JavaPlugin implements Listener {
      * @param e イベント
      */
 
-    @EventHandler
-    public void onPlayerToggleSneak(PlayerToggleSneakEvent e) throws IOException {
-        // イベント発生時のプレイヤーやワールドなどの情報を変数に持つ。
-        Player player = e.getPlayer ();
-        World world = player.getWorld ();
 
-        count++;
-        List<Color> colorList = List.of (RED, BLUE, WHITE, Color.BLACK);
-            if(BigInteger.valueOf(count).isProbablePrime(1)){
-            System.out.println(count + "は素数です");
-                for(Color color : colorList) {
-                // 花火オブジェクトをプレイヤーのロケーション地点に対して出現させる。
-                Firework firework = world.spawn (player.getLocation (), Firework.class);
-
-                // 花火オブジェクトが持つメタ情報を取得。
-                FireworkMeta fireworkMeta = firework.getFireworkMeta ();
-
-                // メタ情報に対して設定を追加したり、値の上書きを行う。
-                // 今回は青色で星型の花火を打ち上げる。
-                fireworkMeta.addEffect (
-                    FireworkEffect.builder ()
-                        .withColor (RED)
-                        .withColor (BLUE)
-                        .withColor (GREEN)
-                        .withColor (WHITE)
-                        .with (Type.BALL_LARGE)
-                        .withFlicker ()
-                        .build ());
-                fireworkMeta.setPower (3);
-
-                // 追加した情報で再設定する。
-                firework.setFireworkMeta (fireworkMeta);
-                }
-
-            }
-      Path path = Path.of ("firework.txt");
-      Files.writeString (path, "たーまやー", StandardOpenOption.APPEND);
-      player.sendMessage(Files.readString (path));
-
-    }
 
     @EventHandler
     public void onPlayerBedEnter(PlayerBedEnterEvent e) {
@@ -97,12 +60,62 @@ public final class Main extends JavaPlugin implements Listener {
       player.getInventory (). setContents(itemStacks);
 
   }
+
+  @EventHandler
+  public void PlayerJoinEvent (PlayerJoinEvent e) throws IOException {
+    Player player = e.getPlayer();
+
+    Path path = Path.of ("join.txt");
+    Files.writeString (path,"ログインしてくれ頼む", StandardOpenOption.CREATE);
+    player.sendMessage(Files.readString (path));
+  }
+
+  @EventHandler
+  public void onPlayerToggleSneak(PlayerToggleSneakEvent e) throws IOException {
+    // イベント発生時のプレイヤーやワールドなどの情報を変数に持つ。
+    Player player = e.getPlayer ();
+    World world = player.getWorld ();
+
+    count++;
+    List<Color> colorList = List.of (RED, BLUE, WHITE, Color.BLACK);
+    if(BigInteger.valueOf(count).isProbablePrime(1)){
+      System.out.println(count + "は素数です");
+      for(Color color : colorList) {
+        // 花火オブジェクトをプレイヤーのロケーション地点に対して出現させる。
+        Firework firework = world.spawn (player.getLocation (), Firework.class);
+
+        // 花火オブジェクトが持つメタ情報を取得。
+        FireworkMeta fireworkMeta = firework.getFireworkMeta ();
+
+        // メタ情報に対して設定を追加したり、値の上書きを行う。
+        // 今回は青色で星型の花火を打ち上げる。
+        fireworkMeta.addEffect (
+            FireworkEffect.builder ()
+                .withColor (RED)
+                .withColor (BLUE)
+                .withColor (GREEN)
+                .withColor (WHITE)
+                .with (Type.BALL_LARGE)
+                .withFlicker ()
+                .build ());
+        fireworkMeta.setPower (3);
+
+        // 追加した情報で再設定する。
+        firework.setFireworkMeta (fireworkMeta);
+      }
+
+    }
+    Path path = Path.of ("firework.txt");
+    Files.writeString (path, "たーまやー");
+    player.sendMessage(Files.readString (path));
+
+  }
 }
 
 //ここを変更しました。
 //ここも変更しました。
 //プルリクエスト本番
-//できた？
+//できたかな？
 
 
     
