@@ -34,33 +34,33 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public final class Main extends JavaPlugin implements Listener {
 
-    int count = 0;
+  int count = 0;
 
-    @Override
-    public void onEnable() {
-      Bukkit.getPluginManager ().registerEvents (this, this);
-    }
+  @Override
+  public void onEnable() {
+    Bukkit.getPluginManager ().registerEvents (this, this);
+  }
 
-    @EventHandler
-    public void PlayerJoinEvent (PlayerJoinEvent e) throws IOException {
-      Player player = e.getPlayer();
+  @EventHandler
+  public void PlayerJoinEvent (PlayerJoinEvent e) throws IOException {
+    Player player = e.getPlayer();
 
-      Path path = Path.of ("join.txt");
-      Files.writeString (path,"ログインしてくれ頼む", StandardOpenOption.CREATE);
-      player.sendMessage(Files.readString (path));
-    }
+    Path path = Path.of ("join.txt");
+    Files.writeString (path,"ログインしてくれ頼む", StandardOpenOption.CREATE);
+    player.sendMessage(Files.readString (path));
+  }
 
 
-    @EventHandler
-    public void onPlayerBedEnter(PlayerBedEnterEvent e) {
-      Player player = e.getPlayer ();
-      ItemStack[] itemStacks = player.getInventory ().getContents ();
-      Arrays.stream (itemStacks)
-          .filter (item -> !Objects.isNull (item) && item.getMaxStackSize () == 64 && item.getAmount () < 64)
-          .forEach (item -> item.setAmount (0));
+  @EventHandler
+  public void onPlayerBedEnter(PlayerBedEnterEvent e) {
+    Player player = e.getPlayer ();
+    ItemStack[] itemStacks = player.getInventory ().getContents ();
+    Arrays.stream (itemStacks)
+      .filter (item -> !Objects.isNull (item) && item.getMaxStackSize () == 64 && item.getAmount () < 64)
+      .forEach (item -> item.setAmount (0));
 
-      player.getInventory (). setContents(itemStacks);
-    }
+    player.getInventory (). setContents(itemStacks);
+  }
 
   @EventHandler
   public void onPlayerToggleSneak(PlayerToggleSneakEvent e) throws IOException {
