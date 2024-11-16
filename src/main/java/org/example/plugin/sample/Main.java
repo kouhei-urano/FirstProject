@@ -1,5 +1,6 @@
 package org.example.plugin.sample;
 
+import static org.bukkit.Color.BLACK;
 import static org.bukkit.Color.BLUE;
 import static org.bukkit.Color.GREEN;
 import static org.bukkit.Color.RED;
@@ -37,16 +38,17 @@ public final class Main extends JavaPlugin implements Listener {
 
     @Override
     public void onEnable() {
-      Bukkit.getPluginManager().registerEvents(this, this);
-
+      Bukkit.getPluginManager ().registerEvents (this, this);
     }
 
-    /**
-     * プレイヤーがスニークを開始/終了する際に起動されるイベントハンドラ。
-     *
-     * @param e イベント
-     */
+    @EventHandler
+    public void PlayerJoinEvent (PlayerJoinEvent e) throws IOException {
+      Player player = e.getPlayer();
 
+      Path path = Path.of ("join.txt");
+      Files.writeString (path,"ログインしてくれ頼む", StandardOpenOption.CREATE);
+      player.sendMessage(Files.readString (path));
+    }
 
 
     @EventHandler
@@ -58,17 +60,7 @@ public final class Main extends JavaPlugin implements Listener {
           .forEach (item -> item.setAmount (0));
 
       player.getInventory (). setContents(itemStacks);
-
-  }
-
-  @EventHandler
-  public void PlayerJoinEvent (PlayerJoinEvent e) throws IOException {
-    Player player = e.getPlayer();
-
-    Path path = Path.of ("join.txt");
-    Files.writeString (path,"ログインしてくれ頼む", StandardOpenOption.CREATE);
-    player.sendMessage(Files.readString (path));
-  }
+    }
 
   @EventHandler
   public void onPlayerToggleSneak(PlayerToggleSneakEvent e) throws IOException {
@@ -77,18 +69,13 @@ public final class Main extends JavaPlugin implements Listener {
     World world = player.getWorld ();
 
     count++;
-    List<Color> colorList = List.of (RED, BLUE, WHITE, Color.BLACK);
+    List<Color> colorList = List.of (RED, BLUE, WHITE, BLACK);
     if(BigInteger.valueOf(count).isProbablePrime(1)){
       System.out.println(count + "は素数です");
       for(Color color : colorList) {
-        // 花火オブジェクトをプレイヤーのロケーション地点に対して出現させる。
         Firework firework = world.spawn (player.getLocation (), Firework.class);
-
-        // 花火オブジェクトが持つメタ情報を取得。
         FireworkMeta fireworkMeta = firework.getFireworkMeta ();
 
-        // メタ情報に対して設定を追加したり、値の上書きを行う。
-        // 今回は青色で星型の花火を打ち上げる。
         fireworkMeta.addEffect (
             FireworkEffect.builder ()
                 .withColor (RED)
@@ -103,12 +90,11 @@ public final class Main extends JavaPlugin implements Listener {
         // 追加した情報で再設定する。
         firework.setFireworkMeta (fireworkMeta);
       }
-
     }
+
     Path path = Path.of ("firework.txt");
     Files.writeString (path, "たーまやー");
     player.sendMessage(Files.readString (path));
-
   }
 }
 
