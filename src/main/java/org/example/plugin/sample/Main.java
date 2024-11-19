@@ -1,5 +1,6 @@
 package org.example.plugin.sample;
 
+import static java.util.Objects.requireNonNull;
 import static org.bukkit.Color.BLACK;
 import static org.bukkit.Color.BLUE;
 import static org.bukkit.Color.GREEN;
@@ -39,14 +40,19 @@ public final class Main extends JavaPlugin implements Listener {
   @Override
   public void onEnable() {
     Bukkit.getPluginManager ().registerEvents (this, this);
+    requireNonNull (getCommand ("setLevel")).setExecutor(new SetLevelCommand ());
+    requireNonNull (getCommand ("allSetLevel")).setExecutor (new AllSetlevelCommand ());
   }
+
+
+
 
   @EventHandler
   public void PlayerJoinEvent (PlayerJoinEvent e) throws IOException {
     Player player = e.getPlayer();
 
     Path path = Path.of ("join.txt");
-    Files.writeString (path,"ログインしてくれ頼む", StandardOpenOption.CREATE);
+    Files.writeString (path,"ログインしたやで", StandardOpenOption.CREATE);
     player.sendMessage(Files.readString (path));
   }
 
